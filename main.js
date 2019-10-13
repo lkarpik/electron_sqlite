@@ -10,7 +10,9 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database/file.db');
 
 db.serialize(function () {
-  db.run("CREATE TABLE Products (name, barcode, quantity)");
+  db.run("CREATE TABLE Products (name, barcode, quantity)", (err) => {
+    console.log(err);
+  });
 
   // db.run("INSERT INTO Products VALUES (?, ?, ?)", ['product001', 'xxxxx', 20]);
   // db.run("INSERT INTO Products VALUES (?, ?, ?)", ['product002', 'xxxxx', 40]);
