@@ -1,12 +1,33 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
-const path = require('path')
+const {
+  app,
+  BrowserWindow
+} = require('electron');
+const path = require('path');
+const Sequelize = require("sequelize");
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('./database/file.db');
+
+db.serialize(function () {
+  db.run("CREATE TABLE Products (name, barcode, quantity)");
+
+  // db.run("INSERT INTO Products VALUES (?, ?, ?)", ['product001', 'xxxxx', 20]);
+  // db.run("INSERT INTO Products VALUES (?, ?, ?)", ['product002', 'xxxxx', 40]);
+  // db.run("INSERT INTO Products VALUES (?, ?, ?)", ['product003', 'xxxxx', 60]);
+
+  db.each("SELECT * FROM Products WHERE quantity=40", function (err, row) {
+    console.log(row);
+  });
+});
+
+db.close();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
